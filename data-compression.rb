@@ -7,41 +7,42 @@ file_to_compress = File.read(file_name)
 
 uncompressed_file = File.new("uncompressed_file.txt", 'w')
 
-compressed_file = File.new("#{file_name}_c.txt", 'w')
 
 
+def compress_file(file_to_compress, file_name)
 
+  compressed_file = File.new("#{file_name}_c.txt", 'w')
 
-i = 0
-dictionary_size = 256
-dictionary = {}
+  i = 0
+  dictionary_size = 256
+  dictionary = {}
 
-while i < dictionary_size
-  dictionary[i.chr] = i.chr
-  i += 1
-end
-
-w = nil
-for c in file_to_compress.split('')
-  wc = ([w,c].join)
-  if dictionary.has_key?(wc)
-    w = wc
-  else
-    compressed_file.write(dictionary[w])
-    dictionary[wc] = dictionary_size
-    dictionary_size += 1
-    w = c
+  while i < dictionary_size
+    dictionary[i.chr] = i.chr
+    i += 1
   end
+
+  w = nil
+  for c in file_to_compress.split('')
+    wc = ([w,c].join)
+    if dictionary.has_key?(wc)
+      w = wc
+    else
+      compressed_file.write(dictionary[w])
+      dictionary[wc] = dictionary_size
+      dictionary_size += 1
+      w = c
+    end
+  end
+
+  print "Original size:\n"
+  print file_to_compress.size
+
+  print "\nCompressed size:\n"
+  print compressed_file.size
 end
 
-
-print "Original size:\n"
-print file_to_compress.size
-
-print "\nCompressed size:\n"
-print compressed_file.size
-
-
+compress_file(file_to_compress, file_name)
 
 
 # DECOMPRESSION
